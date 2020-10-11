@@ -1,0 +1,27 @@
+version: '3.8'
+
+networks:
+  solr-network:
+    driver: bridge
+
+services:
+  solr:
+    image: bitnami/solr:latest
+    networks:
+      - solr-network
+    ports:
+      - '8983:8983'
+    depends_on:
+      - 'service-db'    
+      
+  service-db:
+    image: postgres:12-alpine
+    ports:
+      - 5632:5432
+    environment:
+      - POSTGRES_DB=solrdb
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    networks:
+      - solr-network
+      
